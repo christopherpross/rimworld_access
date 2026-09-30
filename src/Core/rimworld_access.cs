@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using RimWorldAccess.Shell;
 using UnityEngine;
 using Verse;
 
@@ -8,14 +12,20 @@ namespace RimWorldAccess
     [StaticConstructorOnStartup]
     public static class RimWorldAccessMod
     {
-        public static readonly string HarmonyId = "com.rimworldaccess.mainmenukeyboard";
+        /// <summary>
+        /// Matches About.xml's packageId deliberately. Harmony keeps no mapping from a patch
+        /// owner back to a mod, so this string is the ONLY name other mods can show a player
+        /// when they list who else patched a method (Rimworld Together's compatibility check
+        /// does exactly that) — the previous value dated from when this mod was only a
+        /// main-menu keyboard helper and named neither the mod nor its author. Logs and patch
+        /// listings from before this change refer to the old id.
+        /// </summary>
+        public static readonly string HarmonyId = "aaronr7734.rimworldaccess";
 
         public static Harmony HarmonyInstance { get; private set; }
 
         static RimWorldAccessMod()
         {
-            Log.Message("[RimWorld Access] Initializing accessibility features...");
-
             try
             {
                 TolkHelper.Initialize();
@@ -29,37 +39,67 @@ namespace RimWorldAccess
 
             HarmonyInstance = new Harmony(HarmonyId);
 
-            // Register all typeahead-consuming States so the priority -1.5 dispatch in
-            // UnifiedKeyboardPatch can route layout-aware characters from non-Latin
-            // keyboard layouts (fixes the OlegTheSnowman Cyrillic-typeahead bug).
-            TypeaheadConsumerRegistry.RegisterAll();
+            // RETIRED: TypeaheadConsumerRegistry.RegisterAll()
+            // (called twice here, verbatim duplicate) — the registry it populated is deleted;
+            // see ImeFunnel.RouteImeCommittedChar and FocusStack.OfferChar for the successor.
 
-            // Register all typeahead-consuming States so the priority -1.5 dispatch in
-            // UnifiedKeyboardPatch can route layout-aware characters from non-Latin
-            // keyboard layouts (fixes the OlegTheSnowman Cyrillic-typeahead bug).
-            TypeaheadConsumerRegistry.RegisterAll();
-
-            Log.Message("[RimWorld Access] Applying Harmony patches...");
             HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+            ApplyDropdownRoleBracket(HarmonyInstance);
 
             // DLC-safe: patch Start() on each Dialog_BeginLordJob subclass we don't already
             // patch declaratively. The shared prefix returns false while LordJobDialogState is
             // active, blocking accidental Start invocations behind the user's back.
             ApplyLordJobStartPatches(HarmonyInstance);
+            List<string> compat = CompatBootstrap.ActivateAll(HarmonyInstance);
+            int patchCount = HarmonyInstance.GetPatchedMethods().Count();
 
-            var patchedMethods = HarmonyInstance.GetPatchedMethods();
-            int patchCount = 0;
-            foreach (var method in patchedMethods)
-            {
-                patchCount++;
-                Log.Message($"[RimWorld Access] Patched: {method.DeclaringType?.Name}.{method.Name}");
-            }
-            Log.Message($"[RimWorld Access] Total patches applied: {patchCount}");
+            // Counted separately: this sweep patches only the methods that hold a certified site.
+            TooltipGateInstaller.Install(HarmonyInstance);
+            TooltipGateModScan.Install(HarmonyInstance);
 
-            Log.Message("[RimWorld Access] Main menu keyboard navigation enabled!");
-            Log.Message("[RimWorld Access] Use Arrow keys to navigate, Enter to select.");
+            Log.Message("[RimWorld Access] Loaded. Screen reader: " + TolkHelper.DescribeBackend()
+                + ". Harmony patches: " + patchCount
+                + ". Compat modules: " + (compat.Count == 0 ? "none" : string.Join(", ", compat)) + ".");
+
+            // Settings are loaded by the Mod constructor (runs before this), so we can now compare
+            // the persisted last-seen version against the current one and flag whether to surface the
+            // "What's New" message when the player reaches the main menu.
+            WhatsNewState.CheckForUpdateAtStartup();
 
             Application.quitting += OnApplicationQuit;
+        }
+
+        private static void ApplyDropdownRoleBracket(Harmony harmony)
+        {
+            // Harmony refuses to patch an open generic method definition
+            // (NotSupportedException) — patching Dropdown<Target, Payload>
+            // directly never installs. Resolve the Color-taking generic core
+            // (the other overload delegates to it) and close it with
+            // MakeGenericMethod(object, object). On Mono every reference-type
+            // instantiation of a generic method shares one compiled body, so
+            // this single closed reference-type patch covers every vanilla
+            // call site (both Target and Payload are reference types at every
+            // call site in decompiled Verse/RimWorld code). Value-type
+            // instantiations, if any exist, stay unpatched and just keep the
+            // plain Button role — capture itself rides the non-generic
+            // draggable taps and never depends on this bracket. Do NOT also
+            // patch other closed reference-type forms: two detours over the
+            // same shared Mono body nest their prefix/postfix pairs (see
+            // TextFieldRawPollGuard's maskDepth header).
+            try
+            {
+                MethodInfo dropdownCoreDefinition = AccessTools.GetDeclaredMethods(typeof(Widgets))
+                    .First(m => m.Name == "Dropdown" && m.IsGenericMethodDefinition
+                        && m.GetParameters().Any(p => p.ParameterType == typeof(Color)));
+                MethodInfo dropdownCoreClosed = dropdownCoreDefinition.MakeGenericMethod(typeof(object), typeof(object));
+                harmony.Patch(dropdownCoreClosed,
+                    prefix: new HarmonyMethod(typeof(WidgetCaptureDropdownBracket), nameof(WidgetCaptureDropdownBracket.Prefix)),
+                    postfix: new HarmonyMethod(typeof(WidgetCaptureDropdownBracket), nameof(WidgetCaptureDropdownBracket.Postfix)));
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("[RimWorld Access] Widgets.Dropdown role bracket unavailable (" + ex.GetType().Name + "); dropdown openers will announce as plain buttons.");
+            }
         }
 
         private static void ApplyLordJobStartPatches(Harmony harmony)
@@ -82,13 +122,11 @@ namespace RimWorldAccess
                 var startMethod = AccessTools.Method(t, "Start");
                 if (startMethod == null) continue;
                 harmony.Patch(startMethod, prefix: new HarmonyMethod(prefix));
-                Log.Message($"[RimWorld Access] Applied {typeName}.Start() prefix");
             }
         }
 
         private static void OnApplicationQuit()
         {
-            Log.Message("[RimWorld Access] Shutting down...");
             TolkHelper.Shutdown();
         }
     }

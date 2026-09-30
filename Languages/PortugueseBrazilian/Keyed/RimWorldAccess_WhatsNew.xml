@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--
+    What's New module strings (src/Shell/Screens/WhatsNewState.cs + WhatsNewCatalog.cs). The mod keeps a
+    record of announcements, one per released version (see WhatsNewCatalog, newest first). When
+    the player has unread announcements (e.g. after an update) they are surfaced on the main menu,
+    shown one at a time as a buffer the player arrows through line by line.
+
+    Per-version messages are keyed by version with dots replaced by underscores, e.g.
+    RimWorldAccess.WhatsNew.Message.2_0_0 for version 2.0.0. When a version has no message of its
+    own, RimWorldAccess.WhatsNew.Message.Default is shown instead. Paragraphs are separated by
+    "\n"; each becomes one line the player arrows to.
+
+    When cutting a release, add a new Message.<version> block here (and translate it in the other
+    language folders) and add the version to WhatsNewCatalog. The message is player-facing prose,
+    not a raw changelog dump — the full changelog lives on the website, one button-press away.
+  -->
+
+  <!-- Header (the first line of each announcement). Header is used when there is more than one
+       announcement: {0} = version, {1} = this announcement's number, {2} = total. HeaderSingle is
+       used for a lone announcement (the normal case): {0} = version. -->
+  <RimWorldAccess.WhatsNew.Header>RimWorld Access {0}. Anúncio {1} de {2}.</RimWorldAccess.WhatsNew.Header>
+  <RimWorldAccess.WhatsNew.HeaderSingle>RimWorld Access {0}.</RimWorldAccess.WhatsNew.HeaderSingle>
+
+  <!-- Per-version messages. Paragraphs separated by "\n". -->
+  <RimWorldAccess.WhatsNew.Message.2_0_0>Boas-vindas à versão 2.0, e obrigado por estar aqui. Esta é a maior atualização que o RimWorld Access já teve. Se você se inscreveu pela Steam Workshop e não está no Discord, isso provavelmente parece ter surgido do nada; o pessoal do Discord acompanhou tudo se formando ao longo de todas as atualizações menores que foram necessárias até chegar aqui. Para todos os outros, aqui está a versão resumida do que mudou.\n
+A versão 2.0 é uma reconstrução do RimWorld Access do zero.\n
+As telas estão muito mais consistentes do que antes. As mesmas teclas e a mesma gramática de anúncios valem para o menu principal, a criação de mundo, todas as abas, todos os diálogos e a maioria das telas de mods de terceiros.\n
+Você também sempre consegue chegar aos botões de uma tela. A barra de ferramentas do jogo aparece em todas as telas, e o Tab sempre acaba te levando até ela, então você não deve mais ficar sem saber qual tecla usar para avançar.\n
+Menus e diálogos agora são as janelas reais do jogo, e não mais cópias invisíveis delas, então aparecem na tela exatamente como o jogo os desenha. Quem estiver observando pode ver onde está o seu cursor, e pode usar o mouse junto com você.\n
+Alguns mods populares agora têm suporte dedicado, e os mods que não têm são cobertos por um leitor que lida com a maioria das janelas sozinho.\n
+Também é novo: o texto que o jogo só mostra sob o ponteiro do mouse agora é falado, o modo desenvolvedor está totalmente acessível, ainda que um pouco tosco, há cinco novos idiomas, e um modo de mouse opcional lê o que quer que o ponteiro esteja tocando.\n
+Nos bastidores, reconstruir o funcionamento de uma tela passou de cerca de três dias para cerca de vinte minutos, então as telas devem melhorar bem mais rápido a partir de agora.\n
+Isto é só o resumo. Para o changelog completo e detalhado, escolha Abrir changelog para ler tudo no site.\n
+Uma observação sobre esse changelog: por enquanto ele só está disponível em inglês. Se o inglês não for o seu idioma, talvez seja necessário usar uma ferramenta de tradução por IA para ler a versão completa. Traduzir um changelog desse tamanho para todos os idiomas é mais do que consigo dar conta agora. Mas cada atualização depois desta será bem menor, então o conteúdo completo dela sempre estará bem aqui, nesses anúncios, no seu próprio idioma.\n
+Você pode reabrir isto a qualquer momento em Novidades, no menu principal ou no menu de pausa. Se preferir não ver essas mensagens aparecerem por conta própria, escolha Não mostrar novamente; você ainda ouvirá um breve aviso sempre que o mod for atualizado.\n
+Pressione Esc, ou escolha Fechar, quando terminar. Obrigado por jogar, e por ajudar a tornar o RimWorld jogável para jogadores cegos e com baixa visão. Aproveite!</RimWorldAccess.WhatsNew.Message.2_0_0>
+
+  <RimWorldAccess.WhatsNew.Message.2_0_rc2>Boas-vindas à versão 2.0 release candidate 2. Esta atualização adiciona um registro global, traz de volta as listas clássicas de caravana e corrige um bom punhado de bugs. Aqui está tudo o que mudou.\n
+Novidades.\n
+Foi adicionado o registro global, aberto com Alt+L ou pelo menu F12. Ele lista todos os eventos sociais e de combate do mundo e volta muito mais no tempo que o registro do próprio jogo. Você pode filtrá-lo, pesquisar digitando e ir até os personagens de qualquer entrada.\n
+A formação de caravana, a divisão de caravana e o carregamento de cápsulas de transporte voltaram às listas clássicas por padrão. Cada linha agora lê o que o jogo mostra ao lado, como massa, valor e tempo até apodrecer. Pressione Ctrl+Tab (Option+Tab no Mac) para alternar para a visualização em tabela.\n
+O armazenamento do Adaptive Storage Framework agora tem uma lista de Conteúdo completa. Cada item lê sua massa e os dias até apodrecer. Você também pode alterar o limite de pilhas, permitir ou proibir itens e soltá-los.\n
+Com o Vehicle Framework, a janela de dividir caravana agora tem uma aba Veículos. Você pode separar veículos de uma caravana e atribuir seus assentos.\n
+Mudanças.\n
+Alterar as configurações de piloto automático de um personagem não cancela mais uma ordem que você acabou de dar. O personagem termina essa ordem primeiro. Ordens de ataque continuam valendo imediatamente.\n
+O gravador de voo não registra mais todos os quadros enquanto um menu está aberto, então as gravações ficam bem mais curtas.\n
+Correções.\n
+Corrigido: as configurações de anúncio do tipo e do estado dos controles voltavam a ser ativadas sozinhas após reiniciar o jogo.\n
+A tela de informações da caravana agora dá as localizações como um bioma e coordenadas do mapa, em vez de números de tile. As coordenadas ao sul e a oeste também são lidas corretamente agora.\n
+Corrigido: Shift+Enter em uma linha de caravana ou de cápsula pressionava Enviar. Agora ele leva o máximo que você consegue carregar. Alt+I na aba de personagens da divisão de caravana também abre a ficha de informações correta agora.\n
+Corrigido: as janelas de formação de caravana e de divisão de caravana ficavam em branco na tela enquanto você estava nos botões delas. As linhas de veículos também leem sua velocidade, capacidade de carga e valor agora.\n
+Corrigido: a aba Conteúdo de caixões, portais e outros contêineres lia apenas um resumo. Agora ela lista cada item. Alt+I abre a ficha de informações de um item.\n
+Corrigido: o botão Mude a rota na formação de caravana ficava mudo. Agora ele avisa que você está escolhendo uma rota.\n
+Corrigido: pintar uma política de combate Nenhuma pela aba Atribuir, o que antes pulava todos os personagens.\n
+Corrigido: a edição de uma política de drogas. Agora você pode alterar todas as configurações direto na tabela de drogas.\n
+Corrigido: linhas da ficha de informações, como o sexo ou a categoria de um animal, liam o valor duas vezes.\n
+Corrigido: o painel de inspeção continuava em uma estrutura de construção depois de ela terminar. Agora ele passa para a construção concluída.\n
+Corrigido: um item de menu sem descrição lia a descrição do item acima dele.\n
+Corrigido: os lançamentos de cápsulas de transporte anunciavam dois alcances diferentes. Agora você ouve um só alcance, definido pela cápsula com menos combustível.\n
+Corrigido: o leitor de varredura travava em mapas grandes, principalmente com o jogo em andamento.\n
+Corrigido: o painel de inspeção se comportava mal com mods de armazenamento que abrem a aba Conteúdo por conta própria, como o Adaptive Storage Framework. Você pode deixar essa configuração do mod ativada.\n
+Corrigido um erro na inicialização com o Vehicle Framework instalado. Os movimentos do piloto automático de veículos também voltam a dizer o que estão fazendo.\n
+Corrigido: um veículo em Procurar e destruir ficava preso ao alcançar o inimigo. Agora ele para e luta de onde está.\n
+Você pode reabrir isto a qualquer momento em Novidades, no menu principal ou no menu de pausa.\n
+Pressione Esc, ou escolha Fechar, quando terminar. Obrigado por jogar, e aproveite!</RimWorldAccess.WhatsNew.Message.2_0_rc2>
+
+  <!-- Fallback message when a version has no message of its own. -->
+  <RimWorldAccess.WhatsNew.Message.Default>O RimWorld Access foi atualizado. Escolha Abrir changelog para ler o que mudou no site.</RimWorldAccess.WhatsNew.Message.Default>
+
+  <!-- Buttons reached by arrowing past the last line of the message. -->
+  <!-- {0} = number of announcements still unread. -->
+  <RimWorldAccess.WhatsNew.Button.NextAnnouncement>Ir para o próximo anúncio ({0} anúncios restantes)</RimWorldAccess.WhatsNew.Button.NextAnnouncement>
+  <!-- {0} = total number of announcements in the record (always 2 or more when this button shows). -->
+  <RimWorldAccess.WhatsNew.Button.MarkAllRead>Marcar todos os {0} anúncios como lidos</RimWorldAccess.WhatsNew.Button.MarkAllRead>
+  <RimWorldAccess.WhatsNew.Button.OpenChangelog>Abrir changelog no navegador</RimWorldAccess.WhatsNew.Button.OpenChangelog>
+  <RimWorldAccess.WhatsNew.Button.Close>Fechar</RimWorldAccess.WhatsNew.Button.Close>
+  <RimWorldAccess.WhatsNew.Button.DontShowAgain>Não mostrar novamente</RimWorldAccess.WhatsNew.Button.DontShowAgain>
+
+  <!-- Spoken feedback. -->
+  <RimWorldAccess.WhatsNew.OpeningChangelog>Abrindo o changelog no seu navegador.</RimWorldAccess.WhatsNew.OpeningChangelog>
+  <RimWorldAccess.WhatsNew.AllMarkedRead>Todos os anúncios marcados como lidos.</RimWorldAccess.WhatsNew.AllMarkedRead>
+  <RimWorldAccess.WhatsNew.Suppressed>Certo. As próximas atualizações darão apenas um breve aviso. Você pode reativar essas mensagens em Opções, RimWorld Access.</RimWorldAccess.WhatsNew.Suppressed>
+  <RimWorldAccess.WhatsNew.Closed>Novidades fechadas.</RimWorldAccess.WhatsNew.Closed>
+
+  <!-- Brief notice spoken instead of the full reader when the player has turned auto-popups off.
+       {0} is the newest version. -->
+  <RimWorldAccess.WhatsNew.UpdateWhisper>O RimWorld Access foi atualizado para a versão {0}. Abra Novidades no menu para ler o que mudou.</RimWorldAccess.WhatsNew.UpdateWhisper>
+
+  <!-- Menu items (main menu and in-game pause menu). -->
+  <RimWorldAccess.WhatsNew.MenuItem.WhatsNew>Novidades</RimWorldAccess.WhatsNew.MenuItem.WhatsNew>
+  <RimWorldAccess.WhatsNew.MenuItem.Website>Site do RimWorld Access</RimWorldAccess.WhatsNew.MenuItem.Website>
+  <RimWorldAccess.WhatsNew.MenuItem.Discord>Discord do RimWorld Access</RimWorldAccess.WhatsNew.MenuItem.Discord>
+
+</LanguageData>

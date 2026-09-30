@@ -17,6 +17,8 @@
 
   <RimWorldAccess.TextInput.EditingField>Editando {0}: {1}. Escribe el nuevo valor, Enter para confirmar, Escape para cancelar.</RimWorldAccess.TextInput.EditingField>
   <RimWorldAccess.TextInput.EditingMultiLineField>Editando campo de varias líneas {0}: {1}. Escribe, Shift+Enter para nueva línea, Arriba/Abajo para navegar por líneas, Enter para confirmar, Escape para cancelar.</RimWorldAccess.TextInput.EditingMultiLineField>
+  <RimWorldAccess.TextInput.BrowsingField>Viendo {0}, solo lectura: {1}.</RimWorldAccess.TextInput.BrowsingField>
+  <RimWorldAccess.TextInput.ReadOnlyField>Este texto es de solo lectura</RimWorldAccess.TextInput.ReadOnlyField>
   <RimWorldAccess.TextInput.Empty>vacío</RimWorldAccess.TextInput.Empty>
   <RimWorldAccess.TextInput.Deleted>{0} eliminado</RimWorldAccess.TextInput.Deleted>
   <RimWorldAccess.TextInput.FieldSet>{0} cambiado a {1}</RimWorldAccess.TextInput.FieldSet>

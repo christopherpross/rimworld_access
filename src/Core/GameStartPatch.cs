@@ -1,6 +1,4 @@
 using HarmonyLib;
-using RimWorld;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorldAccess
@@ -18,26 +16,32 @@ namespace RimWorldAccess
         [HarmonyPostfix]
         public static void Postfix()
         {
-            MultiSelectState.Reset();
-            DocsTeacher.ResetSession();
-
-            // Loading a save from in-game never passes through the main menu or a
-            // CurrentMap == null frame, so no other reset path fires. The old session's
-            // Things are never despawned (ClearAllMapsAndWorld just drops them) and still
-            // report Spawned == true, and the reloaded map keeps its saved uniqueID — so
-            // stale caches pass every liveness and map-identity check, and the scanner's
-            // thing-state hash (a bare spawn/despawn counter) can collide between two
-            // saves of the same colony. Reset all ambient map-session state here;
-            // FinalizeInit fires on both new games and saves loaded from anywhere.
-            MapNavigationState.Reset(); // also invalidates ScannerState + ScannerHelper caches
-            PawnSelectionState.Reset();
-            WorldScannerState.Reset();
-            PlantTargetingState.Reset();
+            // The full ordered checklist of static per-screen resets lives in
+            // StateResetRegistry.OnGameLoad — see that file for the manifest and the
+            // per-entry rationale this used to carry inline.
+            StateResetRegistry.RunOnGameLoad();
 
             LongEventHandler.ExecuteWhenFinished(() =>
             {
                 if (Find.CurrentMap != null)
                 {
+                    // A brand-new game starts at Normal; pause it (silently) for orientation before
+                    // the drop pods land. Loads keep their saved speed. GameStartPauseKeeperPatch
+                    // relies on this pause to hold across the scenario intro's closeAction.
+                    if (Find.TickManager.TicksGame == 0
+                        && (RimWorldAccessMod_Settings.Settings?.PauseOnGameStart ?? true))
+                    {
+                        try
+                        {
+                            TimeControlAccessibilityPatch.MuteAnnouncements = true;
+                            Find.TickManager.Pause();
+                        }
+                        finally
+                        {
+                            TimeControlAccessibilityPatch.MuteAnnouncements = false;
+                        }
+                    }
+
                     CameraJumper.TryHideWorld();
 
                     if (WorldNavigationState.IsActive)
@@ -65,6 +69,40 @@ namespace RimWorldAccess
                     DocsTeacher.RequestMapBasicsWhenAllColonistsPresent();
                 }
             });
+        }
+    }
+
+    /// <summary>
+    /// Keeps a new game paused across the scenario intro, whose closeAction resumes the game
+    /// (CurTimeSpeed = Normal) on dismissal. GameStartPatch has already paused, so catching that
+    /// one resume and holding Paused is a silent no-op; vanilla's line never takes effect.
+    /// </summary>
+    [HarmonyPatch(typeof(WindowStack), nameof(WindowStack.Notify_GameStartDialogClosed))]
+    public static class GameStartDialogClosedPatch
+    {
+        // Set as the intro closes, consumed by the CurTimeSpeed = Normal its closeAction makes one
+        // line later. Notify_GameStartDialogClosed has no other caller, so the latch cannot leak.
+        internal static bool PendingIntroResume;
+
+        [HarmonyPostfix]
+        public static void Postfix()
+        {
+            if (RimWorldAccessMod_Settings.Settings?.PauseOnGameStart ?? true)
+                PendingIntroResume = true;
+        }
+    }
+
+    [HarmonyPatch(typeof(TickManager), nameof(TickManager.CurTimeSpeed), MethodType.Setter)]
+    public static class GameStartPauseKeeperPatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(ref TimeSpeed value)
+        {
+            if (!GameStartDialogClosedPatch.PendingIntroResume)
+                return;
+
+            GameStartDialogClosedPatch.PendingIntroResume = false;
+            value = TimeSpeed.Paused;
         }
     }
 }

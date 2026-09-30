@@ -47,8 +47,6 @@
   <RimWorldAccess.Ideology.RitualSound.Playing>{0}, reproduciendo.</RimWorldAccess.Ideology.RitualSound.Playing>
   <RimWorldAccess.Ideology.RitualSound.Stopped>{0}, detenido.</RimWorldAccess.Ideology.RitualSound.Stopped>
   <!-- Context-menu option to start/stop the ritual sound preview in the ideoligion editor. -->
-  <RimWorldAccess.Ideology.RitualSound.Preview>Escuchar sonido del ritual</RimWorldAccess.Ideology.RitualSound.Preview>
-  <RimWorldAccess.Ideology.RitualSound.Stop>Detener sonido del ritual</RimWorldAccess.Ideology.RitualSound.Stop>
 
   <!-- Tab open/close composition.
          TabClosed: spoken when Escape closes the tab. {0} = tab label.
@@ -68,20 +66,22 @@
        (e.g. a minimal/custom ideology with no visible sections).
          {0} = ideology name, {1} = vanilla "NoneLower" translation. -->
   <RimWorldAccess.Ideology.Tree.Empty>{0}. {1}</RimWorldAccess.Ideology.Tree.Empty>
+  <RimWorldAccess.Ideology.OtherPrecepts>Otros preceptos</RimWorldAccess.Ideology.OtherPrecepts>
 
   <!-- IdeoBuilder module strings (src/IdeoBuilder/).
        Navigation hints for the two-tab builder shell. -->
   <RimWorldAccess.Ideology.Builder.TabForIdeoList>Tab para la lista de ideoligiones</RimWorldAccess.Ideology.Builder.TabForIdeoList>
-  <RimWorldAccess.Ideology.Builder.TabToReturnToList>Tab para volver a la lista</RimWorldAccess.Ideology.Builder.TabToReturnToList>
 
   <!-- Spoken when a section or action is disabled but has no specific reason string. -->
   <RimWorldAccess.Ideology.Builder.Unavailable>No disponible</RimWorldAccess.Ideology.Builder.Unavailable>
 
   <!-- Spoken when the ] edit-menu is opened on a precept that has no editable options. -->
   <RimWorldAccess.Ideology.Builder.NoEditOptions>Sin opciones de edición</RimWorldAccess.Ideology.Builder.NoEditOptions>
-  <!-- Hidden display-English sweep (returned/assigned strings localized). -->
-  <RimWorldAccess.Ideology.Builder.PreceptSection.Active>Preceptos activos, {0}</RimWorldAccess.Ideology.Builder.PreceptSection.Active>
-  <RimWorldAccess.Ideology.Builder.PreceptSection.NotSet>Sin definir, {0}</RimWorldAccess.Ideology.Builder.PreceptSection.NotSet>
+  <!-- Hidden display-English sweep (returned/assigned strings localized).
+       The two section names are BARE names: the precept editor is a tree again, so the
+       child count rides the shared expansion suffix instead of the section label. -->
+  <RimWorldAccess.Ideology.Builder.PreceptSection.ActiveName>Preceptos activos</RimWorldAccess.Ideology.Builder.PreceptSection.ActiveName>
+  <RimWorldAccess.Ideology.Builder.PreceptSection.NotSetName>Sin definir</RimWorldAccess.Ideology.Builder.PreceptSection.NotSetName>
   <RimWorldAccess.Ideology.Builder.PreceptSummary>{0} activos, {1} sin definir</RimWorldAccess.Ideology.Builder.PreceptSummary>
   <RimWorldAccess.Ideology.Builder.PreceptCurrent>actual</RimWorldAccess.Ideology.Builder.PreceptCurrent>
 
@@ -101,5 +101,21 @@
   <RimWorldAccess.Ideology.Builder.DiscardConfirm>Si vuelves atrás se descartará esta ideoligión personalizada. ¿Continuar?</RimWorldAccess.Ideology.Builder.DiscardConfirm>
   <RimWorldAccess.Ideology.Builder.DiscardContinue>Continuar</RimWorldAccess.Ideology.Builder.DiscardContinue>
   <RimWorldAccess.Ideology.Builder.DiscardCancel>Cancelar</RimWorldAccess.Ideology.Builder.DiscardCancel>
+  <RimWorldAccess.Ideology.Builder.RandomizeAllConfirm>Aleatorizar reemplazará toda la ideoligión. ¿Deseas continuar?</RimWorldAccess.Ideology.Builder.RandomizeAllConfirm>
+  <RimWorldAccess.Ideology.Builder.RandomizeAllContinue>Continuar</RimWorldAccess.Ideology.Builder.RandomizeAllContinue>
+  <RimWorldAccess.Ideology.Builder.RandomizeAllCancel>Cancelar</RimWorldAccess.Ideology.Builder.RandomizeAllCancel>
+  <RimWorldAccess.Ideology.Builder.EditorRegion>Ideoligión</RimWorldAccess.Ideology.Builder.EditorRegion>
+  <RimWorldAccess.Ideology.Builder.ListRegion>Ideoligiones</RimWorldAccess.Ideology.Builder.ListRegion>
+  <RimWorldAccess.Ideology.Builder.DescriptionLock>Bloquear descripción</RimWorldAccess.Ideology.Builder.DescriptionLock>
+  <RimWorldAccess.Ideology.Builder.DevMaxPoints>DEV: Puntos de desarrollo máximos</RimWorldAccess.Ideology.Builder.DevMaxPoints>
+  <RimWorldAccess.Ideology.Builder.StatusLabel>Estado</RimWorldAccess.Ideology.Builder.StatusLabel>
+  <RimWorldAccess.Ideology.Builder.Appearance.MixedFrequency>Mixto</RimWorldAccess.Ideology.Builder.Appearance.MixedFrequency>
+  <RimWorldAccess.Ideology.Builder.Appearance.GenderFragment>Género: {0}</RimWorldAccess.Ideology.Builder.Appearance.GenderFragment>
+  <RimWorldAccess.Ideology.Viewer.ListRegion>Ideoligiones</RimWorldAccess.Ideology.Viewer.ListRegion>
+  <RimWorldAccess.Ideology.Viewer.DetailsRegion>Detalles</RimWorldAccess.Ideology.Viewer.DetailsRegion>
+  <RimWorldAccess.Ideology.Viewer.EditorRegion>Editor</RimWorldAccess.Ideology.Viewer.EditorRegion>
+  <RimWorldAccess.Ideology.Viewer.PressEnterToEdit>Presiona Enter para editar</RimWorldAccess.Ideology.Viewer.PressEnterToEdit>
+  <RimWorldAccess.Ideology.Reform.ChangesRegion>Cambios</RimWorldAccess.Ideology.Reform.ChangesRegion>
+  <RimWorldAccess.Ideology.Reform.EditRegion>Editar</RimWorldAccess.Ideology.Reform.EditRegion>
 
 </LanguageData>
